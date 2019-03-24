@@ -2279,9 +2279,12 @@ INFO may provide the values of these header arguments (in the
 	  (unwind-protect
 	      (progn
 		(when outside-scope (widen))
-		(if existing-result (goto-char existing-result)
-		  (goto-char (org-element-property :end inline))
-		  (skip-chars-backward " \t"))
+		(if existing-result 
+		    (goto-char existing-result)
+		  (let ((end-pos (org-element-property :end inline)))
+                    (when end-pos
+                      (goto-char end-pos)
+                      (skip-chars-backward " \t"))))
 		(unless inline
 		  (setq indent (current-indentation))
 		  (forward-line 1))
